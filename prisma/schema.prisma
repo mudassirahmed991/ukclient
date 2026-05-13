@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Settings {
+  id              Int    @id @default(1)
+  heroTitle       String @default("NAJ TURKISH RESTURANT IS A VIBRANT, AUTHENTIC RESTAURANT AND CAFÉ.")
+  heroSubtitle    String @default("We also like to think of ourselves as a \"meat lover's paradise.\"")
+  heroDesc        String @default("Our ever-evolving, seasonal menu is rooted in fresh, locally sourced produce and is 100% authentic, with abundant grilled and halal options crafted to nourish.")
+  whatsappNumber  String @default("+441234567890")
+  whatsappMessage String @default("Hello! I would like to make an inquiry.")
+  shopText        String @default("Stock up on the BD Essentials.")
+  bannerHomeHero    String @default("/hero.png")
+  bannerStatement   String @default("/hero.png")
+  bannerStorefront  String @default("/hero.png")
+  bannerPress       String @default("/hero.png")
+  bannerShop        String @default("/hero.png")
+  bannerFooter      String @default("/hero.png")
+  logoImage         String @default("")
+}
+
+model Location {
+  id    String @id @default(uuid())
+  name  String
+  phone String
+  email String
+  order Int    @default(0)
+}
+
+model Category {
+  id    String     @id @default(uuid())
+  name  String
+  items MenuItem[]
+}
+
+model MenuItem {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  image       String?
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id           String      @id @default(uuid())
+  customerName String
+  phone        String?
+  address      String?
+  paymentMethod String?
+  type         String      // "COLLECTION" | "DELIVERY" | "INSTORE" | "PICKUP"
+  status       String      @default("PENDING") // "PENDING" | "COMPLETED"
+  total        Float
+  createdAt    DateTime    @default(now())
+  items        OrderItem[]
+}
+
+model OrderItem {
+  id          String @id @default(uuid())
+  orderId     String
+  order       Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId  String
+  nameAtTime  String
+  priceAtTime Float
+  quantity    Int
+}
+
+model Reservation {
+  id           String   @id @default(uuid())
+  customerName String
+  email        String
+  phone        String
+  date         String
+  time         String
+  guests       Int
+  status       String   @default("PENDING")
+  createdAt    DateTime @default(now())
+}

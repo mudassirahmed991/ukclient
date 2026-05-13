@@ -1,26 +1,106 @@
-@import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-mustard: #D4AF37; /* Stylish Metallic Gold */
+  --color-mustard-hover: #b5952f;
+  --color-bg: #000000; /* Pure Black Background */
+  --color-text: #D4AF37; /* Golden text */
+  --color-text-muted: #D4AF37; /* Golden for muted/accents */
+  --color-white: #0a0a0a; /* Dark gray for cards/panels */
+  --color-black: #D4AF37; /* Golden text where black was previously used */
+  --color-border: #333333; /* Subtle dark border */
+  --color-light-gray: #111111;
+  
+  --font-heading: var(--font-playfair), serif;
+  --font-body: var(--font-lato), sans-serif;
+  --font-serif: var(--font-playfair), serif;
+  --font-cursive: var(--font-greatvibes), cursive;
+  
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --spacing-xl: 8rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-black);
+  margin-bottom: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-mustard);
+}
+
+button {
+  font-family: var(--font-heading);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.premium-btn {
+  background-color: var(--color-bg);
+  color: var(--color-black);
+  padding: 12px 24px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid var(--color-black);
+}
+
+.premium-btn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.solid-btn {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 12px 24px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid var(--color-black);
+}
+
+.solid-btn:hover {
+  background-color: var(--color-mustard);
+  border-color: var(--color-mustard);
+  color: var(--color-white);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.section {
+  padding: var(--spacing-lg) 0;
 }
