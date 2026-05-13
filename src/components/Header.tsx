@@ -4,22 +4,39 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import styles from "./Header.module.css";
 
+const NAV_LINKS = [
+  { href: "/", label: "HOME" },
+  { href: "/season", label: "IN SEASON" },
+  { href: "https://web.dojo.app/create_booking/vendor/PyvvA8idXRtM-dc6DpBwac6bJXW8TkvUYjwsU8VpSfQ_restaurant", label: "RESERVATIONS", external: true },
+  { href: "/locations", label: "MENUS" },
+  { href: "/about", label: "ABOUT" },
+  { href: "/locations", label: "LOCATIONS" },
+];
+
 export default function Header() {
   const { items } = useCart();
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isFoodMenuOpen, setIsFoodMenuOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [menuData, setMenuData] = useState<any[]>([]);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isMenuOpen && menuData.length === 0) {
+    if (isFoodMenuOpen && menuData.length === 0) {
       fetch('/api/menu')
         .then(res => res.json())
         .then(data => setMenuData(data))
         .catch(err => console.error("Failed to fetch menu", err));
     }
-  }, [isMenuOpen, menuData.length]);
+  }, [isFoodMenuOpen, menuData.length]);
+
+  // Close mobile nav when scrolling
+  useEffect(() => {
+    const handleScroll = () => { if (isMobileNavOpen) setIsMobileNavOpen(false); };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobileNavOpen]);
 
   const toggleCategory = (catId: string) => {
     setExpandedCategory(prev => prev === catId ? null : catId);
@@ -33,23 +50,34 @@ export default function Header() {
       <header className={styles.header}>
         <div className={styles.headerContainer}>
 
+          {/* LEFT: Hamburger on mobile, admin icon on desktop */}
           <div className={styles.left}>
-            <Link href="/admin" style={{ fontSize: '1.1rem', textDecoration: 'none', opacity: 0.5 }} title="Admin Panel">
-              ⚙️
-            </Link>
-
+            {/* Mobile hamburger */}
+            <button
+              className={styles.mobileHamburger}
+              onClick={() => setIsMobileNavOpen(true)}
+              aria-label="Open navigation"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+            {/* Desktop admin icon */}
+            <Link href="/admin" className={styles.adminIcon} title="Admin Panel">⚙️</Link>
           </div>
 
+          {/* CENTER: Nav links — hidden on mobile */}
           <div className={styles.center}>
-            <Link href="/"           className={styles.navLink}>HOME</Link>
-            <Link href="/season"     className={styles.navLink}>IN SEASON</Link>
-            <a href="https://web.dojo.app/create_booking/vendor/PyvvA8idXRtM-dc6DpBwac6bJXW8TkvUYjwsU8VpSfQ_restaurant" target="_blank" rel="noopener noreferrer" className={styles.navLink}>RESERVATIONS</a>
-            <Link href="/locations"       className={styles.navLink}>MENUS</Link>
-            <Link href="/about"      className={styles.navLink}>ABOUT</Link>
-            <Link href="/locations"  className={styles.navLink}>LOCATIONS</Link>
-
+            {NAV_LINKS.map(link =>
+              link.external ? (
+                <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className={styles.navLink}>{link.label}</a>
+              ) : (
+                <Link key={link.label} href={link.href} className={styles.navLink}>{link.label}</Link>
+              )
+            )}
           </div>
 
+          {/* RIGHT: Cart */}
           <div className={styles.right}>
             <Link href="/cart" className={styles.cartLink} id="header-cart-btn">
               <span className={styles.cartIcon}>🛒</span>
@@ -62,30 +90,69 @@ export default function Header() {
 
         </div>
 
-        {/* --- MENU DRAWER OVERLAY --- */}
-        <div className={`${styles.menuDrawerOverlay} ${isMenuOpen ? styles.open : ''}`} onClick={() => setIsMenuOpen(false)}></div>
-        
-        {/* --- MENU DRAWER --- */}
-        <div className={`${styles.menuDrawer} ${isMenuOpen ? styles.open : ''}`}>
+        {/* ====== MOBILE NAV DRAWER ====== */}
+        {/* Overlay */}
+        <div
+          className={`${styles.mobileNavOverlay} ${isMobileNavOpen ? styles.open : ''}`}
+          onClick={() => setIsMobileNavOpen(false)}
+        />
+        {/* Drawer */}
+        <nav className={`${styles.mobileNavDrawer} ${isMobileNavOpen ? styles.open : ''}`}>
+          <div className={styles.mobileNavHeader}>
+            <span className={styles.mobileNavTitle}>NAJ TURKISH</span>
+            <button className={styles.closeBtn} onClick={() => setIsMobileNavOpen(false)}>✕</button>
+          </div>
+          <div className={styles.mobileNavLinks}>
+            {NAV_LINKS.map(link =>
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.mobileNavLink}
+                  onClick={() => setIsMobileNavOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={styles.mobileNavLink}
+                  onClick={() => setIsMobileNavOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
+            {/* Cart link in mobile nav too */}
+            <Link href="/cart" className={styles.mobileNavCartBtn} onClick={() => setIsMobileNavOpen(false)}>
+              🛒 ORDER ONLINE
+            </Link>
+          </div>
+        </nav>
+
+        {/* ====== FOOD MENU DRAWER (desktop) ====== */}
+        <div className={`${styles.menuDrawerOverlay} ${isFoodMenuOpen ? styles.open : ''}`} onClick={() => setIsFoodMenuOpen(false)}></div>
+        <div className={`${styles.menuDrawer} ${isFoodMenuOpen ? styles.open : ''}`}>
           <div className={styles.drawerHeader}>
             <h2>OUR MENU</h2>
-            <button className={styles.closeBtn} onClick={() => setIsMenuOpen(false)}>✕</button>
+            <button className={styles.closeBtn} onClick={() => setIsFoodMenuOpen(false)}>✕</button>
           </div>
-          
           <div className={styles.drawerContent}>
             {menuData.length === 0 ? (
               <p className={styles.loadingText}>Loading...</p>
             ) : (
               menuData.map(cat => (
                 <div key={cat.id} className={styles.categoryBlock}>
-                  <button 
+                  <button
                     className={`${styles.categoryHeader} ${expandedCategory === cat.id ? styles.active : ''}`}
                     onClick={() => toggleCategory(cat.id)}
                   >
                     {cat.name}
                     <span className={styles.chevron}>{expandedCategory === cat.id ? '−' : '+'}</span>
                   </button>
-                  
                   <div className={`${styles.categoryItems} ${expandedCategory === cat.id ? styles.expanded : ''}`}>
                     {cat.items.length === 0 ? (
                       <p className={styles.emptyText}>No items available</p>
