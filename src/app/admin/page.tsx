@@ -31,6 +31,7 @@ export default function AdminPage() {
 
   const printWithQZ = async (order: any) => {
     try {
+      // @ts-ignore
       const qz = (await import('qz-tray')).default;
       if (!qz.websocket.isActive()) {
         await qz.websocket.connect();
