@@ -67,6 +67,12 @@
   flex-wrap: wrap;
 }
 
+@media (max-width: 768px) {
+  .center {
+    display: none;
+  }
+}
+
 .navLink {
   font-family: var(--font-heading);
   font-size: 0.78rem;

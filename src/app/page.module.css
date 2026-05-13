@@ -1,13 +1,20 @@
 .hero {
   position: relative;
   height: 85vh;
-  min-height: 600px;
+  min-height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   background-color: var(--color-light-gray);
   overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .hero {
+    height: 70vh;
+    min-height: 400px;
+  }
 }
 
 .heroImageContainer {
@@ -54,6 +61,13 @@
   margin: 0;
 }
 
+@media (max-width: 480px) {
+  .heroLogoBox h2 {
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+  }
+}
+
 .heroTitle {
   font-size: 1.8rem;
   font-family: var(--font-heading);
@@ -64,12 +78,24 @@
   margin-bottom: var(--spacing-sm);
 }
 
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 1.1rem;
+  }
+}
+
 .heroSubtitle {
   font-size: 1.3rem;
   font-family: var(--font-heading);
   font-weight: 600;
   margin-bottom: var(--spacing-md);
   color: #D4AF37;
+}
+
+@media (max-width: 480px) {
+  .heroSubtitle {
+    font-size: 0.95rem;
+  }
 }
 
 .heroDesc {
@@ -91,6 +117,14 @@
   max-width: 600px;
 }
 
+@media (max-width: 480px) {
+  .heroActions {
+    gap: 10px;
+    bottom: 20px;
+    width: calc(100% - 24px);
+  }
+}
+
 .heroBtn {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
@@ -108,6 +142,14 @@
   cursor: pointer;
   white-space: nowrap;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 480px) {
+  .heroBtn {
+    padding: 10px 10px;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+  }
 }
 
 .heroBtn:hover {
@@ -150,6 +192,14 @@
   padding: 0 20px;
 }
 
+@media (max-width: 768px) {
+  .inSeasonContainer {
+    margin: 50px auto;
+    gap: 50px;
+    padding: 0 12px;
+  }
+}
+
 .inSeasonBlock {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -183,6 +233,13 @@
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+  .inSeasonImage {
+    height: 280px;
+    width: 100%;
+  }
+}
+
 .inSeasonContent {
   display: flex;
   flex-direction: column;
@@ -206,6 +263,19 @@
   color: #D4AF37;
   text-transform: uppercase;
   line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .inSeasonContent h2 {
+    font-size: 3rem;
+    letter-spacing: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .inSeasonContent h2 {
+    font-size: 2.2rem;
+  }
 }
 
 .inSeasonContent h3 {
@@ -274,6 +344,12 @@
   transition: opacity 0.3s ease;
 }
 
+@media (max-width: 480px) {
+  .locationLink {
+    font-size: 1.5rem;
+  }
+}
+
 .locationLink:hover {
   opacity: 0.8;
 }
@@ -306,6 +382,12 @@
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .foodShowcaseImage {
+    height: 300px;
+  }
+}
+
 .foodShowcaseContent {
   display: flex;
   flex-direction: column;
@@ -336,6 +418,12 @@
   line-height: 1.2;
   margin-bottom: 25px;
   text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+  .foodShowcaseTitle {
+    font-size: 1.8rem;
+  }
 }
 
 .foodShowcaseDesc {
@@ -394,6 +482,12 @@
   position: relative;
   height: 600px;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .shopImage {
+    height: 300px;
+  }
 }
 
 .shopContent {
