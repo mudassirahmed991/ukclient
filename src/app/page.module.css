@@ -12,8 +12,8 @@
 
 @media (max-width: 480px) {
   .hero {
-    height: 70vh;
-    min-height: 400px;
+    height: 45vh;
+    min-height: 300px;
   }
 }
 
@@ -630,3 +630,87 @@
   text-shadow: 2px 2px 4px #000000;
 }
 
+
+/* LOCATIONS PAGE RESPONSIVENESS */
+.locationsTitle {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  font-size: 3.5rem;
+  margin-bottom: 40px;
+  color: #D4AF37;
+  -webkit-text-stroke: 1px #000;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.4), 3px 3px 0px #000, 5px 5px 0px #D4AF37;
+}
+
+.locationsSubtitle {
+  margin-bottom: 80px;
+  color: #D4AF37;
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  letter-spacing: 2px;
+  -webkit-text-stroke: 0.5px #000;
+  text-shadow: 2px 2px 0px #000, 3px 3px 0px rgba(212,175,55,0.5);
+}
+
+.locationLinkBlock {
+  display: block;
+  font-size: 3.2rem;
+  margin-bottom: 30px;
+  color: #000;
+  -webkit-text-stroke: 2px #D4AF37;
+  text-shadow: 3px 3px 0px #D4AF37, 6px 6px 10px rgba(0,0,0,0.8);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: all 0.3s ease;
+}
+
+.locationEmailText {
+  display: block;
+  margin-bottom: 25px;
+  font-family: var(--font-heading);
+  color: #fff;
+  -webkit-text-stroke: 0.5px #000;
+  text-shadow: 1px 1px 0px #D4AF37, 2px 2px 4px #000;
+  letter-spacing: 1.5px;
+  font-size: 1.4rem;
+}
+
+.locationPhoneLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #D4AF37;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  -webkit-text-stroke: 1px #000;
+  text-shadow: 2px 2px 0px #000, 4px 4px 0px #D4AF37;
+  letter-spacing: 2px;
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .locationsTitle {
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+  }
+  .locationsSubtitle {
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+  }
+  .locationLinkBlock {
+    font-size: 2rem;
+    -webkit-text-stroke: 1px #D4AF37;
+    margin-bottom: 15px;
+  }
+  .locationEmailText {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+  }
+  .locationPhoneLink {
+    font-size: 1.3rem;
+  }
+}
