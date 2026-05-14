@@ -3,7 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./page.module.css";
 
 export default function AdminPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('naj_admin_auth') === 'true';
+    }
+    return false;
+  });
   const [loginError, setLoginError] = useState('');
 
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -33,8 +38,14 @@ export default function AdminPage() {
     try {
       // @ts-ignore
       const qz = (await import('qz-tray')).default;
+
+      // Bypass QZ Tray certificate check (fixes "Untrusted website" popup)
+      qz.security.setCertificatePromise(() => Promise.resolve(''));
+      qz.security.setSignatureAlgorithm('SHA512');
+      qz.security.setSignaturePromise(() => Promise.resolve(''));
+
       if (!qz.websocket.isActive()) {
-        await qz.websocket.connect();
+        await qz.websocket.connect({ retries: 3, delay: 1 });
       }
       
       const printers = await qz.printers.find();
@@ -52,42 +63,49 @@ export default function AdminPage() {
         : '1 No Name Street<br>Sandwich, CT139AJ';
 
       const htmlData = `
-        <div style="font-family: monospace; width: 300px; padding: 10px; color: black; background: white;">
-          <h2 style="text-align:center; margin-bottom: 5px;">NAJ Turkish Restaurant${activePrintLocation && activePrintLocation.name !== 'Sandwich' ? ' ' + activePrintLocation.name : ''}</h2>
-          <p style="text-align:center; margin-top: 0;">${addressHTML}</p>
-          
-          <p style="text-align:center; margin-top: 15px; font-weight: bold;">Order #${order.id?.substring(0, 6).toUpperCase()} (${order.type})</p>
-          <p style="text-align:center; margin: 5px 0;">Date: ${new Date(order.createdAt || Date.now()).toLocaleString()}</p>
+        <div style="font-family: 'Courier New', Courier, monospace; width: 72mm; padding: 4mm; color: #000000; background: #ffffff; font-size: 13px; line-height: 1.5;">
+          <div style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 6px;">
+            <div style="font-size: 16px; font-weight: 900; letter-spacing: 1px;">NAJ TURKISH RESTAURANT</div>
+            ${activePrintLocation && activePrintLocation.name !== 'Sandwich' ? `<div style="font-size: 13px; font-weight: bold;">${activePrintLocation.name.toUpperCase()}</div>` : ''}
+            <div style="font-size: 11px; margin-top: 3px;">${addressHTML.replace(/<br>/g, ' | ')}</div>
+          </div>
+
+          <div style="text-align:center; background:#000; color:#fff; padding: 5px; margin-bottom: 6px; font-size: 15px; font-weight: 900; letter-spacing: 2px;">
+            *** NEW ORDER ***
+          </div>
+
+          <div style="font-weight: bold; font-size: 13px;">Order: #${order.id?.substring(0, 6).toUpperCase()}</div>
+          <div style="font-weight: bold; font-size: 13px;">Type: ${order.type}</div>
+          <div style="font-size: 11px; color: #333;">Time: ${new Date(order.createdAt || Date.now()).toLocaleString()}</div>
 
           ${(order.type !== 'INSTORE' || (order.customerName && order.customerName !== 'Walk-in Customer')) ? `
-            <hr style="border-top: 1px dashed black; margin: 10px 0;">
-            <p style="margin: 3px 0;"><strong>Name:</strong> ${order.customerName || 'N/A'}</p>
-            <p style="margin: 3px 0;"><strong>Phone:</strong> ${order.phone || 'N/A'}</p>
-            <p style="margin: 3px 0;"><strong>Address:</strong> ${order.address || 'N/A'}</p>
-            <p style="margin: 3px 0;"><strong>Payment:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : 'N/A'}</p>
-          ` : ''}
+            <div style="border-top: 1px dashed #000; margin: 6px 0; padding-top: 6px;">
+              <div><strong>Name:</strong> ${order.customerName || 'N/A'}</div>
+              <div><strong>Phone:</strong> ${order.phone || 'N/A'}</div>
+              ${order.type === 'DELIVERY' ? `<div><strong>Address:</strong> ${order.address || 'N/A'}</div>` : ''}
+              <div><strong>Payment:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : 'N/A'}</div>
+            </div>` : ''}
 
-          <hr style="border-top: 1px dashed black; margin: 10px 0;">
-          ${order.items?.map((item: any) => `
-            <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
-              <span style="flex:1; padding-right:10px;">${item.nameAtTime || item.name}</span>
-              <span>£${(item.priceAtTime || item.price).toFixed(2)}</span>
+          <div style="border-top: 2px solid #000; margin: 6px 0; padding-top: 6px;">
+            <div style="font-weight: 900; margin-bottom: 4px; font-size: 13px;">ITEMS:</div>
+            ${order.items?.map((item: any) => `
+              <div style="display:flex; justify-content:space-between; font-size: 13px; font-weight: bold; margin-bottom: 3px;">
+                <span>${item.quantity || 1}x ${item.nameAtTime || item.name}</span>
+                <span>£${((item.priceAtTime || item.price) * (item.quantity || 1)).toFixed(2)}</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <div style="border-top: 2px solid #000; margin: 6px 0; padding-top: 6px;">
+            <div style="display:flex; justify-content:space-between; font-size: 15px; font-weight: 900;">
+              <span>TOTAL:</span>
+              <span>£${order.total ? order.total.toFixed(2) : '0.00'}</span>
             </div>
-          `).join('')}
-          
-          <hr style="border-top: 1px dashed black; margin: 10px 0;">
-          <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
-            <span>Subtotal:</span>
-            <span>£${order.total ? order.total.toFixed(2) : order.items?.reduce((s:number, i:any) => s + (i.priceAtTime || i.price), 0).toFixed(2)}</span>
           </div>
 
-          <div style="display:flex; justify-content:space-between; margin-top: 10px;">
-            <span>Total:</span>
-            <span>£${order.total ? order.total.toFixed(2) : order.items?.reduce((s:number, i:any) => s + (i.priceAtTime || i.price), 0).toFixed(2)}</span>
-          </div>
-          
-          <p style="text-align:center; margin-top: 20px; font-size: 0.9em;">Printed: ${new Date().toLocaleString()}</p>
-          <p style="text-align:center; margin-top: 10px; font-style: italic;">Thank you for your custom</p>
+          <div style="text-align:center; margin-top: 8px; font-size: 11px; color: #333;">Printed: ${new Date().toLocaleString()}</div>
+          <div style="text-align:center; margin-top: 4px; font-size: 11px;">Thank you for your order!</div>
+          <div style="margin-top: 10px;">&nbsp;</div>
         </div>
       `;
 
@@ -191,6 +209,8 @@ export default function AdminPage() {
     if (email === 'Haider@gamil.com' && password === 'ArfeenHaider') {
       setIsAuthenticated(true);
       setLoginError('');
+      // Save session so admin stays logged in permanently
+      localStorage.setItem('naj_admin_auth', 'true');
     } else {
       setLoginError('Invalid email or password');
     }

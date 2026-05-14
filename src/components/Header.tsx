@@ -126,6 +126,10 @@ export default function Header() {
                 </Link>
               )
             )}
+            {/* Admin link in mobile nav */}
+            <Link href="/admin" className={styles.mobileNavLink} onClick={() => setIsMobileNavOpen(false)}>
+              ⚙️ ADMIN PANEL
+            </Link>
             {/* Cart link in mobile nav too */}
             <Link href="/cart" className={styles.mobileNavCartBtn} onClick={() => setIsMobileNavOpen(false)}>
               🛒 ORDER ONLINE

@@ -49,6 +49,18 @@
   justify-content: center;
 }
 
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+}
+
 .heroLogoBox {
   margin-bottom: var(--spacing-md);
 }
@@ -180,6 +192,13 @@
   position: relative;
   height: 80vh;
   min-height: 500px;
+}
+
+@media (max-width: 768px) {
+  .largeImageBlock {
+    height: 40vh;
+    min-height: 250px;
+  }
 }
 
 /* SECTION 3: In Season */
@@ -461,6 +480,13 @@
   position: relative;
 }
 
+@media (max-width: 768px) {
+  .fullWidthImage {
+    height: 40vh;
+    min-height: 220px;
+  }
+}
+
 /* SECTION 5: Shop Split */
 .shopSection {
   display: grid;
@@ -534,6 +560,14 @@
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .pressSection {
+    height: auto;
+    min-height: 0;
+    padding: 60px 0;
+  }
+}
+
 .pressImage {
   position: absolute;
   top: 0;
@@ -577,6 +611,14 @@
   margin-bottom: 15px;
   -webkit-text-stroke: 1px #000000;
   text-shadow: 2px 2px 8px #000000;
+}
+
+@media (max-width: 480px) {
+  .pressQuote {
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    -webkit-text-stroke: 0;
+  }
 }
 
 .pressAuthor {
