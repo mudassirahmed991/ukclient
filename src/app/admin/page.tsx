@@ -120,12 +120,28 @@ export default function AdminPage() {
          data: htmlData
       }]);
     } catch (err) {
-      console.error("QZ Tray Error, falling back to window.print():", err);
-      // Fallback
-      setReceiptToPrint(order);
-      setTimeout(() => {
-        window.print();
-      }, 500);
+      console.error("QZ Tray Error, using popup print fallback:", err);
+      // Open a clean popup with ONLY the receipt — not the whole page
+      const printWindow = window.open('', '_blank', 'width=420,height=700,scrollbars=yes');
+      if (printWindow) {
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>NAJ Receipt</title>
+            <style>
+              @page { size: 80mm auto; margin: 0; }
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { font-family: 'Courier New', monospace; width: 72mm; padding: 4mm; font-size: 13px; color: #000; background: #fff; }
+            </style>
+          </head>
+          <body>${htmlData}</body>
+          </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => { printWindow.print(); printWindow.close(); }, 600);
+      }
     }
   };
 
