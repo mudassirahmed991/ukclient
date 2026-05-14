@@ -126,7 +126,7 @@ export const menuData = [
   {
     category: "Naj Specials",
     items: [
-      { name: "Family Platter (For 4 People)", description: "3 Cold starters of your choice, Chicken shish, Lamb shish, 1 Skewer of Chicken wings, Adana kofte, 1 Chicken Kofte, Veggie kebab, 2 Lamb Chops, 4 Lamb Ribs, Halloumi. Served with rice, bulgur or chips, and bread & salad.", price: "84.00", prices: { broadstairs: "75.00" } },
+      { name: "Family Platter (For 4 People)", description: "3 Cold starters of your choice, Chicken shish, Lamb shish, 1 Skewer of Chicken wings, Adana kofte, 1 Chicken Kofte, Veggie kebab, 2 Lamb Chops, 4 Lamb Ribs, Halloumi. Served with rice, bulgur or chips, and bread & salad.", price: "84.00", prices: { broadstairs: "80.00" } },
       { name: "Couples Platter (For 2 People)", description: "1 Skewer of Chicken wings, 1 Chicken Shish, 1 Adana kofte, 1 Chicken Kofte, 1 Veggie kebab, Halloumi.", price: "50.00", prices: { broadstairs: "46.00" } }
     ]
   },
