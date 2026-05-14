@@ -35,6 +35,8 @@ export default function AdminPage() {
   const isPrinting = useRef(false);
 
   const printWithQZ = async (order: any) => {
+    // Build receipt HTML outside try/catch so catch block can use it as fallback
+    let htmlData = '';
     try {
       // @ts-ignore
       const qz = (await import('qz-tray')).default;
@@ -62,7 +64,7 @@ export default function AdminPage() {
                : activePrintLocation.email.replace(/, /g, '<br>')))
         : '1 No Name Street<br>Sandwich, CT139AJ';
 
-      const htmlData = `
+      htmlData = `
         <div style="font-family: 'Courier New', Courier, monospace; width: 72mm; padding: 4mm; color: #000000; background: #ffffff; font-size: 13px; line-height: 1.5;">
           <div style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 6px;">
             <div style="font-size: 16px; font-weight: 900; letter-spacing: 1px;">NAJ TURKISH RESTAURANT</div>
