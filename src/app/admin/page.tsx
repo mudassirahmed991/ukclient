@@ -65,49 +65,51 @@ export default function AdminPage() {
         : '1 No Name Street<br>Sandwich, CT139AJ';
 
       htmlData = `
-        <div style="font-family: 'Courier New', Courier, monospace; width: 72mm; padding: 4mm; color: #000000; background: #ffffff; font-size: 13px; line-height: 1.5;">
-          <div style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 6px;">
-            <div style="font-size: 16px; font-weight: 900; letter-spacing: 1px;">NAJ TURKISH RESTAURANT</div>
-            ${activePrintLocation && activePrintLocation.name !== 'Sandwich' ? `<div style="font-size: 13px; font-weight: bold;">${activePrintLocation.name.toUpperCase()}</div>` : ''}
-            <div style="font-size: 11px; margin-top: 3px;">${addressHTML.replace(/<br>/g, ' | ')}</div>
+        <div style="font-family: 'Courier New', Courier, monospace; width: 72mm; padding: 0mm; color: #000000; background: #ffffff; font-size: 13px; line-height: 1.4;">
+          <div style="text-align:center; margin-bottom: 10px;">
+            <div style="font-size: 16px; font-weight: bold;">NAJ Turkish Restaurant</div>
+            <div style="font-size: 13px;">${activePrintLocation && activePrintLocation.name !== 'Sandwich' ? activePrintLocation.name.toUpperCase() + '<br>' : ''}${addressHTML}</div>
           </div>
 
-          <div style="text-align:center; background:#000; color:#fff; padding: 5px; margin-bottom: 6px; font-size: 15px; font-weight: 900; letter-spacing: 2px;">
-            *** NEW ORDER ***
+          <div style="text-align:center; font-weight: bold; margin-bottom: 10px; font-size: 14px;">
+            Order #${order.id?.substring(0, 6).toUpperCase()} (${order.type})
           </div>
-
-          <div style="font-weight: bold; font-size: 13px;">Order: #${order.id?.substring(0, 6).toUpperCase()}</div>
-          <div style="font-weight: bold; font-size: 13px;">Type: ${order.type}</div>
-          <div style="font-size: 11px; color: #333;">Time: ${new Date(order.createdAt || Date.now()).toLocaleString()}</div>
 
           ${(order.type !== 'INSTORE' || (order.customerName && order.customerName !== 'Walk-in Customer')) ? `
-            <div style="border-top: 1px dashed #000; margin: 6px 0; padding-top: 6px;">
-              <div><strong>Name:</strong> ${order.customerName || 'N/A'}</div>
-              <div><strong>Phone:</strong> ${order.phone || 'N/A'}</div>
-              ${order.type === 'DELIVERY' ? `<div><strong>Address:</strong> ${order.address || 'N/A'}</div>` : ''}
+            <div style="border-top: 1px dashed #000; border-bottom: 1px dashed #000; margin: 8px 0; padding: 8px 0;">
+              <div style="margin-bottom:2px;"><strong>Name:</strong> ${order.customerName || 'N/A'}</div>
+              <div style="margin-bottom:2px;"><strong>Phone:</strong> ${order.phone || 'N/A'}</div>
+              ${order.type === 'DELIVERY' ? `<div style="margin-bottom:2px;"><strong>Address:</strong> ${order.address || 'N/A'}</div>` : ''}
               <div><strong>Payment:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : 'N/A'}</div>
             </div>` : ''}
 
-          <div style="border-top: 2px solid #000; margin: 6px 0; padding-top: 6px;">
-            <div style="font-weight: 900; margin-bottom: 4px; font-size: 13px;">ITEMS:</div>
+          <div style="margin: 8px 0;">
             ${order.items?.map((item: any) => `
-              <div style="display:flex; justify-content:space-between; font-size: 13px; font-weight: bold; margin-bottom: 3px;">
-                <span>${item.quantity || 1}x ${item.nameAtTime || item.name}</span>
+              <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
+                <span style="flex: 1; padding-right: 10px;">${item.quantity || 1}x ${item.nameAtTime || item.name}</span>
                 <span>£${((item.priceAtTime || item.price) * (item.quantity || 1)).toFixed(2)}</span>
               </div>
             `).join('')}
           </div>
 
-          <div style="border-top: 2px solid #000; margin: 6px 0; padding-top: 6px;">
-            <div style="display:flex; justify-content:space-between; font-size: 15px; font-weight: 900;">
-              <span>TOTAL:</span>
+          <div style="border-top: 1px dashed #000; margin: 8px 0; padding-top: 8px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
+              <span>Subtotal:</span>
+              <span>£${order.total ? order.total.toFixed(2) : '0.00'}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-weight: bold; font-size: 14px; margin-top: 4px;">
+              <span>Total:</span>
               <span>£${order.total ? order.total.toFixed(2) : '0.00'}</span>
             </div>
           </div>
 
-          <div style="text-align:center; margin-top: 8px; font-size: 11px; color: #333;">Printed: ${new Date().toLocaleString()}</div>
-          <div style="text-align:center; margin-top: 4px; font-size: 11px;">Thank you for your order!</div>
-          <div style="margin-top: 10px;">&nbsp;</div>
+          <div style="text-align:center; margin-top: 15px; font-size: 11px;">
+            Printed: ${new Date().toLocaleString()}
+          </div>
+          <div style="text-align:center; margin-top: 5px; font-size: 11px; font-style: italic;">
+            Thank you for your custom
+          </div>
+          <div style="margin-top: 15px;">&nbsp;</div>
         </div>
       `;
 
