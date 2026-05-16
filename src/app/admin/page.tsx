@@ -202,7 +202,7 @@ export default function AdminPage() {
         isInitialLoad.current = false;
       } else {
         const newOrders = fetchedOrders.filter((o: any) => 
-          !knownOrderIds.current.has(o.id) && o.status === 'PENDING'
+          !knownOrderIds.current.has(o.id)
         );
         fetchedOrders.forEach((o: any) => knownOrderIds.current.add(o.id));
         
@@ -525,9 +525,6 @@ export default function AdminPage() {
                 <div key={order.id} className={styles.orderCard}>
                   <div className={styles.orderHeader}>
                     <h3>{order.customerName} - {order.type}</h3>
-                    <span className={order.status === 'COMPLETED' ? styles.statusCompleted : styles.statusPending}>
-                      {order.status}
-                    </span>
                   </div>
                   <div style={{ fontSize: '0.9rem', color: '#ccc', marginBottom: '10px' }}>
                     {order.phone && <div><strong>Phone:</strong> {order.phone}</div>}
