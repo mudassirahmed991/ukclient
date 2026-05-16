@@ -17,6 +17,12 @@ function MenuContent() {
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
 
+  useEffect(() => {
+    if (location) {
+      localStorage.setItem('naj_order_location', location);
+    }
+  }, [location]);
+
   // Filter and map menu data based on location
   const filteredMenuData = menuData
     .filter((section: any) => !section.locations || (location && section.locations.includes(location)))

@@ -257,6 +257,7 @@ export default function AdminPage() {
 
   // Actions
   const markOrderCompleted = async (id: string) => {
+    setOrders(prev => prev.map(o => o.id === id ? { ...o, status: 'COMPLETED' } : o));
     await fetch(`/api/orders?id=${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

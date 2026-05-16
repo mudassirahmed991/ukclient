@@ -50,6 +50,10 @@ export default function CartPage() {
     if (!paymentMethod) return;
     
     try {
+      // Get branch location from localStorage
+      const branchLocation = localStorage.getItem('naj_order_location');
+      const finalOrderType = orderType.toUpperCase() + (branchLocation ? ` (${branchLocation.toUpperCase()})` : "");
+
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -58,7 +62,7 @@ export default function CartPage() {
           phone: phone,
           address: orderType === "delivery" ? address : undefined,
           paymentMethod: paymentMethod,
-          type: orderType.toUpperCase(),
+          type: finalOrderType,
           items: items
         })
       });
