@@ -34,11 +34,7 @@ export default function AdminPage() {
   const printQueue = useRef<any[]>([]);
   const isPrinting = useRef(false);
 
-  const printWithQZ = async (order: any) => {
-    // Open window synchronously to bypass browser popup blockers!
-    const printWindow = window.open('', '_blank', 'width=420,height=700,scrollbars=yes');
-
-    // Build receipt HTML completely before any QZ logic so catch block always has it
+  const printReceipt = (order: any) => {
     const addressHTML = activePrintLocation 
       ? (activePrintLocation.name.toLowerCase() === 'sandwich' 
           ? '1 No Name Street<br>Sandwich, CT139AJ' 
@@ -96,60 +92,32 @@ export default function AdminPage() {
       </div>
     `;
 
-    try {
-      // @ts-ignore
-      const qz = (await import('qz-tray')).default;
-
-      // Bypass QZ Tray certificate check (fixes "Untrusted website" popup)
-      qz.security.setCertificatePromise(() => Promise.resolve(''));
-      qz.security.setSignatureAlgorithm('SHA512');
-      qz.security.setSignaturePromise(() => Promise.resolve(''));
-
-      if (!qz.websocket.isActive()) {
-        await qz.websocket.connect({ retries: 1, delay: 1 });
-      }
+    const printWindow = window.open('', '_blank', 'width=420,height=700,scrollbars=yes');
+    if (printWindow) {
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>NAJ Receipt</title>
+          <style>
+            @page { size: 80mm auto; margin: 0; }
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Courier New', monospace; width: 72mm; padding: 4mm; font-size: 13px; color: #000; background: #fff; }
+          </style>
+        </head>
+        <body>${htmlData}</body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
       
-      const printers = await qz.printers.find();
-      let printer = await qz.printers.getDefault();
-      // Auto-detect Star printer if it's not the default
-      const starPrinter = printers.find((p: string) => p.toLowerCase().includes('star') || p.toLowerCase().includes('tsp') || p.toLowerCase().includes('epson') || p.toLowerCase().includes('xprinter') || p.toLowerCase().includes('xp-'));
-      if (starPrinter) printer = starPrinter;
-
-      const config = qz.configs.create(printer, {
-         margins: { top: 0, bottom: 0, left: 0, right: 0 },
-      });
-      
-      await qz.print(config, [{
-         type: 'pixel',
-         format: 'html',
-         flavor: 'plain',
-         data: htmlData
-      }]);
-
-      if (printWindow) printWindow.close(); // Close popup if QZ succeeded
-
-    } catch (err) {
-      console.error("QZ Tray Error, using popup print fallback:", err);
-      // Open a clean popup with ONLY the receipt — not the whole page
-      if (printWindow) {
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>NAJ Receipt</title>
-            <style>
-              @page { size: 80mm auto; margin: 0; }
-              * { margin: 0; padding: 0; box-sizing: border-box; }
-              body { font-family: 'Courier New', monospace; width: 72mm; padding: 4mm; font-size: 13px; color: #000; background: #fff; }
-            </style>
-          </head>
-          <body>${htmlData}</body>
-          </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => { printWindow.print(); printWindow.close(); }, 600);
-      }
+      // Auto-trigger print dialog
+      setTimeout(() => { 
+        printWindow.print(); 
+        // We don't automatically close the window so the user can see it
+      }, 500);
+    } else {
+      alert("Please allow popups to print receipts.");
     }
   };
 
@@ -158,7 +126,7 @@ export default function AdminPage() {
     isPrinting.current = true;
     const orderToPrint = printQueue.current.shift();
     
-    await printWithQZ(orderToPrint);
+    printReceipt(orderToPrint);
     
     isPrinting.current = false;
     setTimeout(processPrintQueue, 1000);
@@ -321,11 +289,7 @@ export default function AdminPage() {
     const savedOrder = await res.json();
     setPosCart([]);
     fetchLiveUpdates();
-    await printWithQZ(savedOrder);
-  };
-
-  const printReceipt = async (order: any) => {
-    await printWithQZ(order);
+    printReceipt(savedOrder);
   };
 
   const handleAddItem = async (e: any) => {
