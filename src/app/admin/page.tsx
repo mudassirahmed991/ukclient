@@ -35,8 +35,67 @@ export default function AdminPage() {
   const isPrinting = useRef(false);
 
   const printWithQZ = async (order: any) => {
-    // Build receipt HTML outside try/catch so catch block can use it as fallback
-    let htmlData = '';
+    // Open window synchronously to bypass browser popup blockers!
+    const printWindow = window.open('', '_blank', 'width=420,height=700,scrollbars=yes');
+
+    // Build receipt HTML completely before any QZ logic so catch block always has it
+    const addressHTML = activePrintLocation 
+      ? (activePrintLocation.name.toLowerCase() === 'sandwich' 
+          ? '1 No Name Street<br>Sandwich, CT139AJ' 
+          : (activePrintLocation.name.toLowerCase() === 'broadstairs'
+             ? '1 High St<br>Broadstairs CT10 1LP'
+             : activePrintLocation.email.replace(/, /g, '<br>')))
+      : '1 No Name Street<br>Sandwich, CT139AJ';
+
+    const htmlData = `
+      <div style="font-family: 'Courier New', Courier, monospace; width: 72mm; padding: 0mm; color: #000000; background: #ffffff; font-size: 13px; line-height: 1.4;">
+        <div style="text-align:center; margin-bottom: 10px;">
+          <div style="font-size: 16px; font-weight: bold;">NAJ Turkish Restaurant</div>
+          <div style="font-size: 13px;">${activePrintLocation && activePrintLocation.name !== 'Sandwich' ? activePrintLocation.name.toUpperCase() + '<br>' : ''}${addressHTML}</div>
+        </div>
+
+        <div style="text-align:center; font-weight: bold; margin-bottom: 10px; font-size: 14px;">
+          Order #${order.id?.substring(0, 6).toUpperCase()} (${order.type})
+        </div>
+
+        ${(order.type !== 'INSTORE' || (order.customerName && order.customerName !== 'Walk-in Customer')) ? `
+          <div style="border-top: 1px dashed #000; border-bottom: 1px dashed #000; margin: 8px 0; padding: 8px 0;">
+            <div style="margin-bottom:2px;"><strong>Name:</strong> ${order.customerName || 'N/A'}</div>
+            <div style="margin-bottom:2px;"><strong>Phone:</strong> ${order.phone || 'N/A'}</div>
+            ${order.type === 'DELIVERY' ? `<div style="margin-bottom:2px;"><strong>Address:</strong> ${order.address || 'N/A'}</div>` : ''}
+            <div><strong>Payment:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : 'N/A'}</div>
+          </div>` : ''}
+
+        <div style="margin: 8px 0;">
+          ${order.items?.map((item: any) => `
+            <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
+              <span style="flex: 1; padding-right: 10px;">${item.quantity || 1}x ${item.nameAtTime || item.name}</span>
+              <span>£${((item.priceAtTime || item.price) * (item.quantity || 1)).toFixed(2)}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="border-top: 1px dashed #000; margin: 8px 0; padding-top: 8px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
+            <span>Subtotal:</span>
+            <span>£${order.total ? order.total.toFixed(2) : '0.00'}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-weight: bold; font-size: 14px; margin-top: 4px;">
+            <span>Total:</span>
+            <span>£${order.total ? order.total.toFixed(2) : '0.00'}</span>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top: 15px; font-size: 11px;">
+          Printed: ${new Date().toLocaleString()}
+        </div>
+        <div style="text-align:center; margin-top: 5px; font-size: 11px; font-style: italic;">
+          Thank you for your custom
+        </div>
+        <div style="margin-top: 15px;">&nbsp;</div>
+      </div>
+    `;
+
     try {
       // @ts-ignore
       const qz = (await import('qz-tray')).default;
@@ -47,71 +106,14 @@ export default function AdminPage() {
       qz.security.setSignaturePromise(() => Promise.resolve(''));
 
       if (!qz.websocket.isActive()) {
-        await qz.websocket.connect({ retries: 3, delay: 1 });
+        await qz.websocket.connect({ retries: 1, delay: 1 });
       }
       
       const printers = await qz.printers.find();
       let printer = await qz.printers.getDefault();
       // Auto-detect Star printer if it's not the default
-      const starPrinter = printers.find((p: string) => p.toLowerCase().includes('star') || p.toLowerCase().includes('tsp'));
+      const starPrinter = printers.find((p: string) => p.toLowerCase().includes('star') || p.toLowerCase().includes('tsp') || p.toLowerCase().includes('epson') || p.toLowerCase().includes('xprinter') || p.toLowerCase().includes('xp-'));
       if (starPrinter) printer = starPrinter;
-
-      const addressHTML = activePrintLocation 
-        ? (activePrintLocation.name.toLowerCase() === 'sandwich' 
-            ? '1 No Name Street<br>Sandwich, CT139AJ' 
-            : (activePrintLocation.name.toLowerCase() === 'broadstairs'
-               ? '1 High St<br>Broadstairs CT10 1LP'
-               : activePrintLocation.email.replace(/, /g, '<br>')))
-        : '1 No Name Street<br>Sandwich, CT139AJ';
-
-      htmlData = `
-        <div style="font-family: 'Courier New', Courier, monospace; width: 72mm; padding: 0mm; color: #000000; background: #ffffff; font-size: 13px; line-height: 1.4;">
-          <div style="text-align:center; margin-bottom: 10px;">
-            <div style="font-size: 16px; font-weight: bold;">NAJ Turkish Restaurant</div>
-            <div style="font-size: 13px;">${activePrintLocation && activePrintLocation.name !== 'Sandwich' ? activePrintLocation.name.toUpperCase() + '<br>' : ''}${addressHTML}</div>
-          </div>
-
-          <div style="text-align:center; font-weight: bold; margin-bottom: 10px; font-size: 14px;">
-            Order #${order.id?.substring(0, 6).toUpperCase()} (${order.type})
-          </div>
-
-          ${(order.type !== 'INSTORE' || (order.customerName && order.customerName !== 'Walk-in Customer')) ? `
-            <div style="border-top: 1px dashed #000; border-bottom: 1px dashed #000; margin: 8px 0; padding: 8px 0;">
-              <div style="margin-bottom:2px;"><strong>Name:</strong> ${order.customerName || 'N/A'}</div>
-              <div style="margin-bottom:2px;"><strong>Phone:</strong> ${order.phone || 'N/A'}</div>
-              ${order.type === 'DELIVERY' ? `<div style="margin-bottom:2px;"><strong>Address:</strong> ${order.address || 'N/A'}</div>` : ''}
-              <div><strong>Payment:</strong> ${order.paymentMethod ? order.paymentMethod.toUpperCase() : 'N/A'}</div>
-            </div>` : ''}
-
-          <div style="margin: 8px 0;">
-            ${order.items?.map((item: any) => `
-              <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
-                <span style="flex: 1; padding-right: 10px;">${item.quantity || 1}x ${item.nameAtTime || item.name}</span>
-                <span>£${((item.priceAtTime || item.price) * (item.quantity || 1)).toFixed(2)}</span>
-              </div>
-            `).join('')}
-          </div>
-
-          <div style="border-top: 1px dashed #000; margin: 8px 0; padding-top: 8px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom: 4px;">
-              <span>Subtotal:</span>
-              <span>£${order.total ? order.total.toFixed(2) : '0.00'}</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-weight: bold; font-size: 14px; margin-top: 4px;">
-              <span>Total:</span>
-              <span>£${order.total ? order.total.toFixed(2) : '0.00'}</span>
-            </div>
-          </div>
-
-          <div style="text-align:center; margin-top: 15px; font-size: 11px;">
-            Printed: ${new Date().toLocaleString()}
-          </div>
-          <div style="text-align:center; margin-top: 5px; font-size: 11px; font-style: italic;">
-            Thank you for your custom
-          </div>
-          <div style="margin-top: 15px;">&nbsp;</div>
-        </div>
-      `;
 
       const config = qz.configs.create(printer, {
          margins: { top: 0, bottom: 0, left: 0, right: 0 },
@@ -123,10 +125,12 @@ export default function AdminPage() {
          flavor: 'plain',
          data: htmlData
       }]);
+
+      if (printWindow) printWindow.close(); // Close popup if QZ succeeded
+
     } catch (err) {
       console.error("QZ Tray Error, using popup print fallback:", err);
       // Open a clean popup with ONLY the receipt — not the whole page
-      const printWindow = window.open('', '_blank', 'width=420,height=700,scrollbars=yes');
       if (printWindow) {
         printWindow.document.write(`
           <!DOCTYPE html>
