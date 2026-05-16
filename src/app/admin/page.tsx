@@ -541,9 +541,6 @@ export default function AdminPage() {
                   </ul>
                   <div className={styles.orderTotal}>Total: £{order.total.toFixed(2)}</div>
                   <div className={styles.orderActions}>
-                    {order.status === 'PENDING' && (
-                      <button onClick={() => markOrderCompleted(order.id)} className={styles.completeBtn}>Mark Completed</button>
-                    )}
                     <button onClick={() => printReceipt(order)} className={styles.completeBtn} style={{background: '#555'}}>Print Bill</button>
                     <button onClick={() => deleteOrder(order.id)} className={styles.deleteBtn}>Delete</button>
                   </div>
