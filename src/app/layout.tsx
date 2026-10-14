@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Lato, Great_Vibes } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CustomerReviews from "@/components/CustomerReviews";
 import Providers from "./Providers";
 import "./globals.css";
 import prisma from "@/lib/prisma";
@@ -68,6 +69,7 @@ export default async function RootLayout({
         <Providers>
           <Header />
           {children}
+          <CustomerReviews />
           <Footer />
           <WhatsAppWidget phoneNumber={settings.whatsappNumber} message={settings.whatsappMessage} />
         </Providers>
