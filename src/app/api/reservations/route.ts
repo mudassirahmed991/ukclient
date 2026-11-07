@@ -20,21 +20,39 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    
+
+    if (!body.customerName || !body.phone || !body.date || !body.time) {
+      return NextResponse.json({ error: 'Missing required reservation fields' }, { status: 400 });
+    }
+
+    // Combine branch and special notes into customerName so it displays in the existing admin dashboard without database migration
+    const metaParts = [];
+    if (body.branch) {
+      metaParts.push(`[${body.branch}]`);
+    }
+    if (body.notes && body.notes.trim()) {
+      metaParts.push(`(Note: ${body.notes.trim()})`);
+    }
+
+    const finalCustomerName = metaParts.length > 0
+      ? `${body.customerName.trim()} ${metaParts.join(' ')}`
+      : body.customerName.trim();
+
     const reservation = await prisma.reservation.create({
       data: {
-        customerName: body.customerName,
-        email: body.email,
-        phone: body.phone,
+        customerName: finalCustomerName,
+        email: body.email?.trim() || 'N/A',
+        phone: body.phone.trim(),
         date: body.date,
         time: body.time,
-        guests: parseInt(body.guests),
+        guests: parseInt(body.guests) || 2,
+        status: 'PENDING',
       }
     });
 
     return NextResponse.json(reservation);
   } catch (error) {
-    console.error(error);
+    console.error('Reservation creation error:', error);
     return NextResponse.json({ error: 'Failed to create reservation' }, { status: 500 });
   }
 }

@@ -104,7 +104,7 @@ export default function CustomerReviews() {
       {/* Continuous Slider Tracks */}
       <div className={styles.sliderContainer}>
         {/* Row 1: Sliding Left */}
-        <div className={styles.sliderRow} tabIndex={0} aria-label="Review slider row 1">
+        <div className={styles.sliderRow} aria-label="Review slider row 1">
           <div className={`${styles.sliderTrack} ${styles.trackLeft}`}>
             {/* Primary track (150 items) */}
             {row1.map((review) => (
@@ -118,7 +118,7 @@ export default function CustomerReviews() {
         </div>
 
         {/* Row 2: Sliding Right */}
-        <div className={styles.sliderRow} tabIndex={0} aria-label="Review slider row 2">
+        <div className={styles.sliderRow} aria-label="Review slider row 2">
           <div className={`${styles.sliderTrack} ${styles.trackRight}`}>
             {/* Primary track (150 items) */}
             {row2.map((review) => (
@@ -132,11 +132,10 @@ export default function CustomerReviews() {
         </div>
       </div>
 
-      {/* Disclaimer & Accessibility hint */}
+      {/* Disclaimer */}
       <div className={styles.disclaimerContainer}>
         <p className={styles.disclaimerText}>
           Sample guest feedback entries illustrating dining, takeaway, and hospitality experiences across our Kent branches.
-          <span className={styles.hoverHint}>Hover or tap any card to pause</span>
         </p>
       </div>
     </section>

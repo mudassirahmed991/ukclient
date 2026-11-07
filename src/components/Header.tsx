@@ -4,10 +4,16 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import styles from "./Header.module.css";
 
-const NAV_LINKS = [
+interface NavLinkItem {
+  href: string;
+  label: string;
+  external?: boolean;
+}
+
+const NAV_LINKS: NavLinkItem[] = [
   { href: "/", label: "HOME" },
   { href: "/season", label: "IN SEASON" },
-  { href: "https://web.dojo.app/create_booking/vendor/PyvvA8idXRtM-dc6DpBwac6bJXW8TkvUYjwsU8VpSfQ_restaurant", label: "RESERVATIONS", external: true },
+  { href: "/reservation", label: "RESERVATIONS" },
   { href: "/locations", label: "MENUS" },
   { href: "/about", label: "ABOUT" },
   { href: "/locations", label: "LOCATIONS" },

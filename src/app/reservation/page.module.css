@@ -1,31 +1,130 @@
 .main {
   background-color: #000000;
   color: #D4AF37;
-  min-height: 80vh;
-  padding: 100px 20px;
+  min-height: 85vh;
+  padding: 80px 20px 100px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.container {
-  width: 100%;
-  max-width: 600px;
-  background: #111;
-  padding: 40px;
-  border: 1px solid #333;
-  border-radius: 8px;
+.headerArea {
+  text-align: center;
+  max-width: 720px;
+  margin-bottom: 35px;
 }
 
 .title {
   font-family: var(--font-heading);
-  font-size: 2rem;
-  font-weight: 500;
-  letter-spacing: 2px;
+  font-size: 2.4rem;
+  font-weight: 600;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  margin-bottom: 10px;
-  text-align: center;
+  margin-bottom: 12px;
   color: #D4AF37;
+}
+
+.subtitle {
+  color: #c9c0b0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Branch Quick Contact Cards */
+.quickBranchesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 680px;
+  margin-bottom: 35px;
+}
+
+.branchQuickCard {
+  background: linear-gradient(145deg, #141414, #0d0d0d);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.branchQuickCard:hover {
+  border-color: #D4AF37;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.15);
+}
+
+.branchCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.branchCardName {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #D4AF37;
+  letter-spacing: 1px;
+}
+
+.branchCardAddress {
+  font-size: 0.82rem;
+  color: #aaa;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.branchCallAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #D4AF37;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: rgba(212, 175, 55, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  align-self: flex-start;
+}
+
+.container {
+  width: 100%;
+  max-width: 680px;
+  background: #111111;
+  padding: 40px;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.formHeader {
+  border-bottom: 1px solid #222;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.formTitle {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 1.5px;
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+}
+
+.formDesc {
+  font-size: 0.88rem;
+  color: #888;
+  margin: 0;
 }
 
 .form {
@@ -52,53 +151,207 @@
   font-family: var(--font-heading);
   color: #D4AF37;
   margin-bottom: 8px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .formGroup input,
-.formGroup select {
-  padding: 12px;
+.formGroup select,
+.formGroup textarea {
+  padding: 13px 14px;
   background: #000;
   border: 1px solid #333;
   color: #fff;
-  border-radius: 4px;
+  border-radius: 6px;
   outline: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 .formGroup input:focus,
-.formGroup select:focus {
+.formGroup select:focus,
+.formGroup textarea:focus {
   border-color: #D4AF37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+.formGroup select option {
+  background-color: #111;
+  color: #fff;
+}
+
+.errorMessage {
+  background: rgba(220, 53, 69, 0.15);
+  border: 1px solid #dc3545;
+  color: #ff6b6b;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
 }
 
 .submitBtn {
-  background-color: #D4AF37;
+  background: linear-gradient(135deg, #D4AF37, #c29b28);
   color: #000;
   border: none;
-  padding: 15px;
+  padding: 16px;
   font-family: var(--font-heading);
-  font-size: 1.1rem;
-  font-weight: bold;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-top: 10px;
   transition: all 0.3s ease;
 }
 
 .submitBtn:hover {
-  background-color: #f5d15c;
+  background: linear-gradient(135deg, #e5c14f, #D4AF37);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  transform: translateY(-1px);
 }
 
 .submitBtn:disabled {
-  background-color: #555;
-  color: #888;
+  background: #333;
+  color: #777;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
-@media (max-width: 600px) {
+/* Success Card */
+.successCard {
+  text-align: center;
+  padding: 30px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(46, 204, 113, 0.15);
+  border: 2px solid #2ecc71;
+  color: #2ecc71;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.successTitle {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: #D4AF37;
+  margin-bottom: 12px;
+}
+
+.successDesc {
+  color: #ccc;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 520px;
+  margin-bottom: 25px;
+}
+
+.summaryBox {
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 18px 24px;
+  width: 100%;
+  max-width: 500px;
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #1a1a1a;
+  font-size: 0.92rem;
+}
+
+.summaryRow:last-child {
+  border-bottom: none;
+}
+
+.summaryLabel {
+  color: #888;
+}
+
+.summaryValue {
+  color: #fff;
+  font-weight: 500;
+}
+
+.successActions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.secondaryBtn {
+  background: transparent;
+  border: 1px solid #D4AF37;
+  color: #D4AF37;
+  padding: 12px 24px;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.secondaryBtn:hover {
+  background: rgba(212, 175, 55, 0.15);
+}
+
+@media (max-width: 680px) {
+  .main {
+    padding: 60px 16px 80px 16px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .quickBranchesGrid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .container {
+    padding: 24px 18px;
+  }
+
   .formRow {
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
+  }
+
+  .formGroup input,
+  .formGroup select,
+  .formGroup textarea {
+    font-size: 1rem;
+    padding: 12px;
   }
 }

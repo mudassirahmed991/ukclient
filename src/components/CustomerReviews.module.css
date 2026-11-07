@@ -108,6 +108,12 @@
   width: 100%;
   overflow: hidden;
   user-select: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sliderRow::-webkit-scrollbar {
+  display: none;
 }
 
 .sliderTrack {
@@ -124,12 +130,6 @@
 
 .trackRight {
   animation: slideRight 280s linear infinite;
-}
-
-/* Pause smoothly when user hovers or interacts */
-.sliderRow:hover .sliderTrack,
-.sliderRow:focus-within .sliderTrack {
-  animation-play-state: paused;
 }
 
 @keyframes slideLeft {
@@ -309,76 +309,301 @@
   margin: 0 auto;
 }
 
-.hoverHint {
-  display: block;
-  font-size: 0.72rem;
-  color: rgba(212, 175, 55, 0.7);
-  margin-top: 6px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
 
-/* Accessibility: Respect Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  .trackLeft,
-  .trackRight {
-    animation: none;
+
+/* ==========================================================================
+   Comprehensive Responsive Media Queries
+   ========================================================================== */
+
+/* Laptops & Small Desktops (max-width: 1200px) */
+@media (max-width: 1200px) {
+  .headerContainer {
+    max-width: 1000px;
+    margin-bottom: 35px;
+    padding: 0 20px;
   }
-  .sliderRow {
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding-bottom: 12px;
-  }
+
   .sliderContainer {
-    mask-image: none;
-    -webkit-mask-image: none;
+    gap: 20px;
+  }
+
+  .sliderTrack {
+    gap: 18px;
+  }
+
+  .card {
+    width: 330px;
+    min-width: 330px;
+    padding: 20px 22px;
   }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* Tablets Landscape & Medium Screens (max-width: 992px) */
+@media (max-width: 992px) {
   .reviewsSection {
-    padding: 60px 0 45px 0;
+    padding: 70px 0 50px 0;
   }
 
   .headerContainer {
     margin-bottom: 30px;
+  }
+
+  .cursiveSubtitle {
+    font-size: 1.8rem;
+  }
+
+  .sectionTitle {
+    font-size: 2.1rem;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .sliderContainer {
+    gap: 18px;
+  }
+
+  .sliderTrack {
+    gap: 16px;
+  }
+
+  .card {
+    width: 310px;
+    min-width: 310px;
+    padding: 18px 20px;
+  }
+
+  .trackLeft {
+    animation-duration: 220s;
+  }
+
+  .trackRight {
+    animation-duration: 240s;
+  }
+}
+
+/* Tablets Portrait & Large Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .reviewsSection {
+    padding: 55px 0 40px 0;
+  }
+
+  .ambientGlow {
+    width: 450px;
+    height: 300px;
+  }
+
+  .headerContainer {
+    margin-bottom: 26px;
     padding: 0 16px;
   }
 
   .cursiveSubtitle {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
-  .card {
-    width: 300px;
-    min-width: 300px;
-    padding: 18px 20px;
+  .sectionTitle {
+    font-size: 1.7rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
   }
 
-  .cardComment {
-    font-size: 0.88rem;
-    -webkit-line-clamp: 4;
-  }
-
-  .trackLeft {
-    animation-duration: 200s;
-  }
-
-  .trackRight {
-    animation-duration: 220s;
-  }
-}
-
-@media (max-width: 480px) {
-  .card {
-    width: 280px;
-    min-width: 280px;
-    padding: 16px 18px;
+  .sectionDescription {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin-bottom: 18px;
   }
 
   .statsBadgeBar {
+    font-size: 0.78rem;
+    gap: 8px 14px;
+    padding: 6px 16px;
+  }
+
+  .sliderContainer {
+    gap: 16px;
+    mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+  }
+
+  .sliderTrack {
+    gap: 14px;
+  }
+
+  .card {
+    width: 290px;
+    min-width: 290px;
+    padding: 16px 18px;
+    gap: 12px;
+    border-radius: 10px;
+  }
+
+  .cardComment {
+    font-size: 0.86rem;
+    line-height: 1.48;
+    -webkit-line-clamp: 4;
+  }
+
+  .starRating {
+    font-size: 0.88rem;
+  }
+
+  .authorAvatar {
+    width: 32px;
+    height: 32px;
     font-size: 0.75rem;
-    gap: 8px 12px;
+  }
+
+  .authorName {
+    font-size: 0.82rem;
+  }
+
+  .authorLocationAndDate {
+    font-size: 0.7rem;
+  }
+
+  .trackLeft {
+    animation-duration: 180s;
+  }
+
+  .trackRight {
+    animation-duration: 190s;
+  }
+
+  .disclaimerContainer {
+    margin-top: 25px;
+    padding: 0 16px;
+  }
+
+  .disclaimerText {
+    font-size: 0.7rem;
+  }
+}
+
+/* Standard Smartphones (max-width: 480px) */
+@media (max-width: 480px) {
+  .reviewsSection {
+    padding: 45px 0 35px 0;
+  }
+
+  .cursiveSubtitle {
+    font-size: 1.35rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.45rem;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  .sectionDescription {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin-bottom: 16px;
+  }
+
+  .statsBadgeBar {
+    font-size: 0.72rem;
+    gap: 6px 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+
+  .sliderContainer {
+    gap: 12px;
+  }
+
+  .sliderTrack {
+    gap: 12px;
+  }
+
+  .card {
+    width: 260px;
+    min-width: 260px;
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .cardComment {
+    font-size: 0.82rem;
+    line-height: 1.42;
+    -webkit-line-clamp: 4;
+  }
+
+  .starRating {
+    font-size: 0.82rem;
+  }
+
+  .branchTag {
+    font-size: 0.62rem;
+    padding: 2px 6px;
+  }
+
+  .samplePill {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+  }
+
+  .trackLeft {
+    animation-duration: 150s;
+  }
+
+  .trackRight {
+    animation-duration: 160s;
+  }
+}
+
+/* Extra Small Screens (max-width: 360px) */
+@media (max-width: 360px) {
+  .reviewsSection {
+    padding: 40px 0 30px 0;
+  }
+
+  .cursiveSubtitle {
+    font-size: 1.25rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.3rem;
+  }
+
+  .statsBadgeBar {
+    font-size: 0.68rem;
+    padding: 5px 10px;
+  }
+
+  .card {
+    width: 235px;
+    min-width: 235px;
+    padding: 12px 14px;
+  }
+
+  .cardComment {
+    font-size: 0.78rem;
+  }
+
+  .authorMeta {
+    gap: 8px;
+  }
+
+  .authorAvatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+
+  .authorName {
+    font-size: 0.78rem;
+  }
+
+  .authorLocationAndDate {
+    font-size: 0.65rem;
+  }
+
+  .trackLeft {
+    animation-duration: 130s;
+  }
+
+  .trackRight {
+    animation-duration: 140s;
   }
 }
