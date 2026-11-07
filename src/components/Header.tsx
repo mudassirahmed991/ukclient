@@ -13,7 +13,7 @@ interface NavLinkItem {
 const NAV_LINKS: NavLinkItem[] = [
   { href: "/", label: "HOME" },
   { href: "/season", label: "IN SEASON" },
-  { href: "/reservation", label: "RESERVATIONS" },
+  { href: "https://web.dojo.app/create_booking/vendor/PyvvA8idXRtM-dc6DpBwac6bJXW8TkvUYjwsU8VpSfQ_restaurant", label: "RESERVATIONS", external: true },
   { href: "/locations", label: "MENUS" },
   { href: "/about", label: "ABOUT" },
   { href: "/locations", label: "LOCATIONS" },

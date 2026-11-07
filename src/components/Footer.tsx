@@ -7,7 +7,7 @@ export default function Footer() {
       <div className={styles.footerLinks}>
         <Link href="/" className={styles.footerLink}>HOME</Link>
         <Link href="/season" className={styles.footerLink}>IN SEASON</Link>
-        <Link href="/reservation" className={styles.footerLink}>RESERVATIONS</Link>
+        <a href="https://web.dojo.app/create_booking/vendor/PyvvA8idXRtM-dc6DpBwac6bJXW8TkvUYjwsU8VpSfQ_restaurant" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>RESERVATIONS</a>
         <Link href="/locations" className={styles.footerLink}>LOCATIONS & MENUS</Link>
         <Link href="/about" className={styles.footerLink}>ABOUT</Link>
       </div>

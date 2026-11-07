@@ -31,9 +31,9 @@ export default async function Home() {
             {settings.heroDesc}
           </p>
           <div className={styles.heroActions}>
-            <Link href="/reservation" style={{ width: '100%' }}>
+            <a href="https://web.dojo.app/create_booking/vendor/PyvvA8idXRtM-dc6DpBwac6bJXW8TkvUYjwsU8VpSfQ_restaurant" target="_blank" rel="noopener noreferrer" style={{ width: '100%' }}>
               <button className={styles.heroBtn}>Reserve a Table</button>
-            </Link>
+            </a>
             <Link href="/locations" style={{ width: '100%' }}>
               <button className={styles.heroBtn}>Online Order</button>
             </Link>
